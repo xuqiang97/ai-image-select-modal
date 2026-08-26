@@ -92,7 +92,7 @@
     .btn.compact { min-height: 28px; height: 28px; padding: 0 9px; font-size: 12px; }
 
     .table-wrap { overflow-x: auto; border-top: 1px solid var(--line); }
-    table { width: 100%; min-width: 980px; border-collapse: collapse; table-layout: fixed; }
+    table { width: 100%; min-width: 1330px; border-collapse: collapse; table-layout: fixed; }
     th { height: 44px; padding: 0 12px; color: var(--text-2); background: #f7f8fa; font-size: 13px; text-align: left; font-weight: 600; border-bottom: 1px solid var(--line); }
     td { padding: 13px 12px; vertical-align: top; border-bottom: 1px solid var(--line); font-size: 13px; }
     tr:hover td { background: #fbfdff; }
@@ -100,7 +100,7 @@
     .col-basic { width: 205px; }
     .col-status { width: 90px; }
     .col-text { width: 310px; }
-    .col-images { width: 292px; }
+    .col-images { width: 380px; }
     .col-config { width: 150px; }
     .col-actions { width: 150px; }
     .line { margin-bottom: 5px; color: var(--text-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -110,14 +110,19 @@
     .status.incomplete { color: #d46b08; background: #fff7e6; }
     .cell-actions { display: flex; gap: 4px; flex-wrap: wrap; }
 
-    .image-cell { min-height: 94px; }
-    .image-cell-toolbar { display: flex; justify-content: flex-end; align-items: center; gap: 5px; margin: -2px 0 8px; }
+    .table-wrap td:nth-child(5) { padding-left: 8px; padding-right: 8px; }
+    .image-cell { min-height: 100px; }
+    .image-cell-toolbar { min-height: 28px; display: flex; justify-content: flex-end; align-items: center; gap: 5px; margin: -2px 0 6px; }
     .thumb-strip { display: flex; align-items: flex-start; gap: 7px; flex-wrap: wrap; }
     .thumb { position: relative; width: 54px; height: 54px; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; background: #f2f3f5; }
     .thumb.drag-over { outline: 2px solid var(--primary); outline-offset: 2px; }
+    .thumb.dragging { opacity: .55; }
     .thumb-preview { position: absolute; inset: 0; width: 100%; height: 100%; padding: 0; border: 0; background: transparent; cursor: zoom-in; }
     .thumb-preview img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .thumb-handle { position: absolute; left: 3px; top: 3px; width: 22px; height: 22px; padding: 0; border: 0; display: grid; place-items: center; color: #fff; background: rgba(0,0,0,.62); border-radius: 4px; cursor: grab; font-size: 12px; z-index: 2; user-select: none; }
+    .drawer-thumbs .thumb-preview::after { content: "点击预览"; position: absolute; right: 4px; bottom: 4px; padding: 1px 4px; border-radius: 3px; color: #fff; background: rgba(0,0,0,.62); font-size: 9px; line-height: 14px; opacity: 0; pointer-events: none; transition: opacity .15s ease; }
+    .drawer-thumbs .thumb:hover .thumb-preview:not(:disabled)::after, .drawer-thumbs .thumb-preview:focus-visible::after { opacity: 1; }
+    .drawer-thumbs .thumb-preview:focus-visible { outline: 2px solid var(--primary); outline-offset: -2px; }
+    .thumb-handle { position: absolute; left: 3px; top: 3px; width: 22px; height: 22px; padding: 0; border: 0; display: grid; place-items: center; color: #fff; background: rgba(0,0,0,.62); border-radius: 4px; cursor: grab; font-size: 12px; z-index: 2; user-select: none; touch-action: none; }
     .thumb-handle:active { cursor: grabbing; }
     .thumb-delete { position: absolute; right: 3px; top: 3px; width: 22px; height: 22px; padding: 0; border: 0; border-radius: 4px; color: #fff; background: rgba(0,0,0,.62); z-index: 2; }
     .source-dot { position: absolute; left: 4px; bottom: 4px; z-index: 1; padding: 1px 4px; border-radius: 3px; color: #fff; background: rgba(22,119,255,.82); font-size: 9px; line-height: 14px; pointer-events: none; }
@@ -125,7 +130,10 @@
     .add-thumb { width: 54px; height: 54px; border: 1px dashed #b8c2cc; border-radius: 6px; color: var(--text-3); background: #fff; font-size: 20px; }
     .add-thumb:hover { color: var(--primary); border-color: var(--primary); }
     .missing { display: flex; align-items: center; height: 54px; color: var(--warning); font-size: 12px; }
-    .saved-hint { margin-top: 6px; color: var(--text-3); font-size: 11px; }
+    .thumb-strip[data-thumb-scope="task"] { flex-wrap: nowrap; gap: 6px; }
+    .thumb-strip[data-thumb-scope="task"] .thumb, .thumb-strip[data-thumb-scope="task"] .add-thumb { flex: 0 0 68px; width: 68px; height: 68px; }
+    .thumb-strip[data-thumb-scope="task"] .missing { height: 68px; }
+    .saved-hint { min-width: 0; margin-right: auto; overflow: hidden; color: var(--text-3); font-size: 11px; white-space: nowrap; text-overflow: ellipsis; }
     .saved-hint.saving { color: var(--primary); }
     .saved-hint.saved { color: #00875a; }
     .saved-hint.error { color: var(--danger); }
@@ -153,9 +161,13 @@
     .reason { margin-top: 5px; color: var(--text-3); font-size: 12px; }
     .form-error { margin-top: 7px; color: var(--danger); font-size: 12px; }
     .drop-zone { border: 1px dashed #b8c2cc; border-radius: 8px; padding: 12px; background: #fafbfc; }
-    .drawer-thumbs { min-height: 62px; }
-    .upload-trigger { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 54px; margin-top: 9px; border-radius: 6px; color: var(--text-3); background: #fff; cursor: pointer; }
+    .drawer-thumbs { min-height: 80px; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); align-items: start; gap: 8px; }
+    .drawer-thumbs .thumb, .drawer-thumbs .add-thumb { width: 100%; height: auto; aspect-ratio: 1 / 1; }
+    .drawer-thumbs .thumb-handle { width: auto; min-width: 42px; height: 24px; padding: 0 7px; display: flex; align-items: center; justify-content: center; gap: 3px; }
+    .drawer-thumbs[hidden], .upload-trigger[hidden] { display: none; }
+    .upload-trigger { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 76px; border-radius: 6px; color: var(--text-3); background: #fff; cursor: pointer; }
     .upload-trigger:hover { color: var(--primary); background: #f7fbff; }
+    .drop-zone.drag-active { border-color: var(--primary); background: #f7fbff; }
     .drawer-footer { flex: 0 0 68px; height: 68px; display: flex; align-items: center; justify-content: flex-end; gap: 10px; padding: 0 22px; border-top: 1px solid var(--line); background: #fff; }
 
     .modal-mask { position: fixed; inset: 0; z-index: 200; display: none; align-items: center; justify-content: center; padding: 28px; background: rgba(0,0,0,.47); }
@@ -293,13 +305,14 @@
           </div>
           <span class="focus-mark">③ 总量场景</span>
           <div class="scenario-buttons" id="scenarioButtons">
-            <button data-scenario="mixed">混合图片 4/5</button>
-            <button data-scenario="fullMixed">已有5张可替换</button>
-            <button data-scenario="allProtected">5张均需保留</button>
-            <button data-scenario="empty">当前无参考图</button>
+            <button data-scenario="defaultWhite" title="还原美工版和运营版当前统一的默认取白底图逻辑">默认白底 5/5</button>
+            <button data-scenario="mixed">混合 4/5</button>
+            <button data-scenario="fullMixed">5张可替换</button>
+            <button data-scenario="allProtected">5张均保留</button>
+            <button data-scenario="empty">无参考图</button>
             <button id="simulateListSaveFailure">下次列表保存失败</button>
           </div>
-          <span class="prototype-note">可从列表直接选图，也可进入新增/编辑抽屉体验</span>
+          <span class="prototype-note">实图样例：22062564（12张）</span>
         </div>
 
         <div class="focus-guide" aria-label="本期完整动态交互重点">
@@ -359,11 +372,11 @@
         <div class="form-row"><label class="form-label required" id="bulletLabel">中文核心卖点</label><textarea id="bulletInput" class="form-control"></textarea></div>
         <div class="form-row">
           <div class="form-label required"><span class="annotated-title">参考图（1-5张）<span class="focus-mark compact">⑤⑥</span></span><span id="drawerProductEntryWrap" class="tooltip-wrap"><span class="focus-mark compact">①</span><button id="drawerProductEntry" class="btn outline-primary compact">从产品库选择</button><span id="drawerProductTooltip" class="tooltip">请先查询并确认系统SKU</span></span></div>
-          <div class="drop-zone">
+          <div id="drawerReferenceZone" class="drop-zone">
             <div id="drawerThumbs" class="thumb-strip drawer-thumbs"></div>
-            <div id="drawerUploadTrigger" class="upload-trigger">＋ 点击上传 / 拖拽 / 粘贴　<span id="drawerCount">已上传 0/5 张</span></div>
+            <div id="drawerUploadTrigger" class="upload-trigger">＋ 点击上传 / 拖拽 / 粘贴　<span id="drawerCount">当前 0/5 张</span></div>
           </div>
-          <div class="reason"><span class="focus-mark compact">⑥</span> 缩略图左上角手柄用于排序；拖入空白上传区域只处理本地文件。</div>
+          <div class="reason"><span class="focus-mark compact">⑥</span> <span id="drawerImageHint"></span></div>
           <div id="drawerValidation" class="form-error" role="alert" hidden></div>
         </div>
         <div class="form-row"><label class="form-label required">生成图片语言</label><select class="form-control"><option>英语</option><option>德语</option><option>法语</option></select></div>
@@ -408,33 +421,32 @@
   <input id="fileInput" type="file" accept="image/*" multiple hidden />
 
   <script>
-    const photo = (id, w = 600) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=82`;
-
     const products = [
-      { id: 'p1', name: '白底正面图', url: photo('photo-1523275335684-37898b6baf30'), types: ['white'] },
-      { id: 'p2', name: '白底侧面图', url: photo('photo-1542291026-7eec264c27ff'), types: ['white'] },
-      { id: 'p3', name: '客厅场景图', url: photo('photo-1555041469-a586c61ea9bc'), types: ['scene'] },
-      { id: 'p4', name: '桌面使用场景', url: photo('photo-1494438639946-1ebd1d20bf85'), types: ['scene'] },
-      { id: 'p5', name: '手持使用场景', url: photo('photo-1513116476489-7635e79feb27'), types: ['scene', 'hand'] },
-      { id: 'p6', name: '手持细节图', url: photo('photo-1523206489230-c012c64b2b48'), types: ['hand', 'detail'] },
-      { id: 'p7', name: '产品尺寸标注图', url: photo('photo-1560343090-f0409e92791a'), types: ['size'] },
-      { id: 'p8', name: '商品细节特写图', url: photo('photo-1586023492125-27b2c045efd7'), types: ['detail'], unavailable: true },
-      { id: 'p9', name: '白底俯视图', url: photo('photo-1505740420928-5e560c06d30e'), types: ['white'] },
-      { id: 'p10', name: '户外使用场景', url: photo('photo-1484154218962-a197022b5858'), types: ['scene'] }
-    ];
-
-    const localPool = [
-      { id: 'l1', url: photo('photo-1517336714731-489689fd1ca8'), source: 'local', name: '本地上传图1' },
-      { id: 'l2', url: photo('photo-1484101403633-562f891dc89a'), source: 'local', name: '本地上传图2' },
-      { id: 'l3', url: photo('photo-1545239351-1141bd82e8a6'), source: 'local', name: '本地上传图3' },
-      { id: 'l4', url: photo('photo-1493663284031-b7e3aefcae8e'), source: 'local', name: '本地上传图4' },
-      { id: 'l5', url: photo('photo-1524758631624-e2822e304c36'), source: 'local', name: '本地上传图5' }
+      { id: 'p1', name: 'SKU 22062564 场景图 1', url: 'https://irobotbox-hd1.oss-cn-hangzhou.aliyuncs.com/1/AutoChoose/Artical/20251011/f954f6f16dbd43098effa645ca37768b.jpg', types: ['scene'] },
+      { id: 'p2', name: 'SKU 22062564 场景图 2', url: 'https://irobotbox-hd1.oss-cn-hangzhou.aliyuncs.com/1/AutoChoose/Artical/20251011/0421f9b7af494a30b4f2358ad05e9bf5.jpg', types: ['scene'] },
+      { id: 'p3', name: 'SKU 22062564 细节图 1', url: 'https://irobotbox-hd1.oss-cn-hangzhou.aliyuncs.com/1/AutoChoose/Artical/20260728/5060f51791884932bf01669a764e8b5f.jpg', types: ['detail'] },
+      { id: 'p4', name: 'SKU 22062564 细节图 2', url: 'https://irobotbox-hd1.oss-cn-hangzhou.aliyuncs.com/1/AutoChoose/Artical/20260728/1f04543532de48d694dfe3e37ec2219d.jpg', types: ['detail'], unavailable: true },
+      { id: 'p5', name: 'SKU 22062564 白底图 1', url: 'https://irobotbox-hd1.oss-cn-hangzhou.aliyuncs.com/1/ProductImages/22062564/2025/10/11/57ebdbc583394c39aa0b5926de85c9bd/76ebe414-5272-4864-a17b-ce3404d7d12e.jpg', types: ['white'] },
+      { id: 'p6', name: 'SKU 22062564 尺寸图 1', url: 'https://irobotbox-hd1.oss-cn-hangzhou.aliyuncs.com/1/ProductImages/22062564/2025/10/11/89de8f37f22448d59eeb40c3516b16fc/7c73e8f0-ade5-4b38-a3c4-9608244d2495.jpg', types: ['size'] },
+      { id: 'p7', name: 'SKU 22062564 白底图 2', url: 'https://irobotbox-hd1.oss-cn-hangzhou.aliyuncs.com/1/ProductImages/22062564/2025/10/11/842a7cc14eeb41ad8efefdcd2298cc3a/e627125b-2916-47a2-ad32-0684239fc99b.jpg', types: ['white'] },
+      { id: 'p8', name: 'SKU 22062564 尺寸图 2', url: 'https://irobotbox-hd1.oss-cn-hangzhou.aliyuncs.com/1/ProductImages/22062564/2025/10/11/bcdd8bc340e046d1b0079102eee5eddc/3ee333f8-1319-401e-953a-03d890287f5a.jpg', types: ['size'] },
+      { id: 'p9', name: 'SKU 22062564 白底图 3', url: 'https://irobotbox-hd1.oss-cn-hangzhou.aliyuncs.com/1/ProductImages/22062564/2025/10/11/8711165d17c44819a71366a5ce747c49/3848e4ba-4846-40d7-b6bc-894d5cd06a92.jpg', types: ['white'] },
+      { id: 'p10', name: 'SKU 22062564 白底图 4', url: 'https://irobotbox-hd1.oss-cn-hangzhou.aliyuncs.com/1/ProductImages/22062564/2025/10/11/516bba01950d4a7cb631c496fbb8f7fe/15c6b487-f2bd-4669-9cb5-932c6f938e6b.jpg', types: ['white'] },
+      { id: 'p11', name: 'SKU 22062564 白底图 5', url: 'https://irobotbox-hd1.oss-cn-hangzhou.aliyuncs.com/1/ProductImages/22062564/2025/10/11/48ac7dde8b7e4f9c9fd83e81e2c92aa5/06b59cbd-2352-4f47-a502-484dda6b4e5e.jpg', types: ['white'] },
+      { id: 'p12', name: 'SKU 22062564 手持图', url: 'https://irobotbox-hd1.oss-cn-hangzhou.aliyuncs.com/1/ProductImages/22062564/2025/10/11/0094dedd0c5a42a1b17e04fec9a6f676/010678d9-ec06-4158-9a57-2cfff9c04008.jpg', types: ['hand'] }
     ];
 
     const productImage = id => {
       const p = products.find(x => x.id === id);
       return { id: `img-${id}`, productId: id, url: p.url, source: 'product', name: p.name };
     };
+    const localImage = (id, productId) => {
+      const p = products.find(x => x.id === productId);
+      return { id, url: `${p.url}#local-${id}`, source: 'local', name: `SKU 22062564 本地上传示例 ${id.slice(1)}` };
+    };
+    const localPool = [
+      localImage('l1', 'p1'), localImage('l2', 'p2'), localImage('l3', 'p3'), localImage('l4', 'p6'), localImage('l5', 'p12')
+    ];
     const clone = data => JSON.parse(JSON.stringify(data));
 
     const tasks = {
@@ -443,7 +455,7 @@
         { id: 'T20260825_000102', sku: '22705034', status: '待完善', title: '多功能厨房切片工具（脱敏演示商品）', category: 'Home & Kitchen >> Kitchen Tools', size: '10 × 9.9 × 0.5 cm', bullet: '多功能设计，适用于多种食材处理。', images: [], config: 'LF · 8　场景3 / 特写2' }
       ],
       ops: [
-        { id: 'T20260825_000201', store: 'Amazon-DEMO-US', asin: 'B0DEMO001', sku: '6409613', status: '待提交', title: 'Demo Heavy Duty Hanging Kit', category: 'Industrial & Scientific', size: '7 × 1.3 × 1.3 cm', bullet: 'Reliable load support and easy installation for demonstration.', images: [], config: 'LF · 6　场景2 / 卖点2' },
+        { id: 'T20260825_000201', store: 'Amazon-DEMO-US', asin: 'B0DEMO001', sku: '22062564', status: '待提交', title: 'Zodiac Horse Ceramic Coin Bank (Demo)', category: 'Toys & Games >> Money Banks', size: '23.5 × 21.5 × 10 cm', bullet: 'Decorative horse-shaped coin bank for home display and gifting.', images: [], config: 'LF · 6　场景2 / 卖点2' },
         { id: 'T20260825_000202', store: 'Amazon-DEMO-DE', asin: 'B0DEMO002', sku: '8154637', status: '待完善', title: 'Demo Rabbit Hay Feeder', category: 'Pet Supplies', size: '23 × 10 × 7.5 cm', bullet: 'Sturdy feeder designed for small pets.', images: [], config: 'LF · 4　场景1 / 特写1' }
       ]
     };
@@ -463,14 +475,15 @@
     const els = Object.fromEntries([...document.querySelectorAll('[id]')].map(el => [el.id, el]));
 
     function makeScenario(name) {
-      if (name === 'mixed') return [clone(localPool[0]), productImage('p1'), clone(localPool[1]), productImage('p3')];
-      if (name === 'fullMixed') return [clone(localPool[0]), productImage('p1'), clone(localPool[1]), productImage('p3'), productImage('p4')];
+      if (name === 'defaultWhite') return products.filter(p => p.types.includes('white')).slice(0, 5).map(p => productImage(p.id));
+      if (name === 'mixed') return [clone(localPool[0]), productImage('p5'), clone(localPool[1]), productImage('p1')];
+      if (name === 'fullMixed') return [clone(localPool[0]), productImage('p5'), clone(localPool[1]), productImage('p1'), productImage('p3')];
       if (name === 'allProtected') return clone(localPool);
       return [];
     }
 
-    tasks.artist[0].images = makeScenario('mixed');
-    tasks.ops[0].images = makeScenario('mixed');
+    tasks.artist[0].images = makeScenario('defaultWhite');
+    tasks.ops[0].images = makeScenario('defaultWhite');
 
     function taskIsComplete(task, side = currentSide) {
       const identityReady = side === 'artist' ? !!task.sku : !!task.store && !!task.asin && !!task.sku;
@@ -518,7 +531,7 @@
           <td>${basic}<div class="line"><strong>TaskID：</strong>${task.id}</div><div class="line"><strong>更新：</strong>2026-08-25 10:30</div></td>
           <td><span class="status ${task.status === '待提交' ? 'ready' : 'incomplete'}">${task.status}</span></td>
           <td><div class="line"><strong>标题：</strong>${task.title}</div><div class="line"><strong>类目：</strong>${task.category}</div><div class="line"><strong>尺寸：</strong>${task.size}</div><div class="line"><strong>${currentSide === 'artist' ? '卖点' : '五点描述'}：</strong>${task.bullet}</div></td>
-          <td><div class="image-cell"><div class="image-cell-toolbar"><span class="focus-mark compact">①</span>${productEntryButton(task, imageSaving)}</div><div class="thumb-strip" data-thumb-scope="task" data-task-id="${task.id}"></div>${renderListImageSaveHint(imageSaveStatus)}</div></td>
+          <td><div class="image-cell"><div class="image-cell-toolbar"><span class="focus-mark compact">④⑥</span>${renderListImageSaveHint(imageSaveStatus)}${productEntryButton(task, imageSaving)}</div><div class="thumb-strip" data-thumb-scope="task" data-task-id="${task.id}"></div></div></td>
           <td><div class="line">${task.config}</div><div class="line">总计划：4 张</div></td>
           <td><div class="cell-actions"><button class="btn text edit-task" data-id="${task.id}">编辑</button><button class="btn text submit-task" data-id="${task.id}" ${task.status !== '待提交' ? 'disabled title="请先补全任务必填信息"' : ''}>提交生图</button><button class="btn text danger">删除</button></div></td>
         </tr>`;
@@ -539,13 +552,13 @@
 
     function renderListImageSaveHint(status) {
       const states = {
-        idle: ['列表操作将立即保存参考图字段，不提交任务', ''],
+        idle: ['', ''],
         saving: ['保存中…', 'saving'],
-        saved: ['✓ 已保存到参考图字段', 'saved'],
-        error: ['保存失败，已恢复原图片和顺序，请重试', 'error']
+        saved: ['✓ 已保存', 'saved'],
+        error: ['保存失败，已恢复，请重试', 'error']
       };
       const [text, className] = states[status] || states.idle;
-      return `<div class="saved-hint ${className}" aria-live="polite" ${status === 'error' ? 'role="alert"' : ''}><span class="focus-mark compact">④⑥</span> ${text}</div>`;
+      return `<span class="saved-hint ${className}" aria-live="polite" title="${text}" ${status === 'error' ? 'role="alert"' : ''}>${text}</span>`;
     }
 
     function productEntryButton(task, saving = false) {
@@ -627,7 +640,8 @@
         const controlsDisabled = options.saving ? 'disabled' : '';
         const sourceLabel = img.source === 'local' ? '本地' : (img.source === 'product' ? '产品库' : '');
         const sourceTag = sourceLabel ? `<span class="source-dot ${img.source === 'local' ? 'local' : ''}">${sourceLabel}</span>` : '';
-        node.innerHTML = `<button type="button" class="thumb-handle" draggable="${!options.saving}" aria-label="拖拽排序：${imageLabel}" title="按住拖拽排序" ${controlsDisabled}>⠿</button><button type="button" class="thumb-delete" aria-label="删除${imageLabel}" title="删除" ${controlsDisabled}>×</button><button type="button" class="thumb-preview" aria-label="放大预览${imageLabel}"><img src="${img.url}" alt="" /></button>${sourceTag}`;
+        const handleContent = options.scope === 'drawer' ? `⠿ ${index + 1}` : '⠿';
+        node.innerHTML = `<button type="button" class="thumb-handle" aria-label="拖拽排序：${imageLabel}" title="按住拖拽排序" ${controlsDisabled}>${handleContent}</button><button type="button" class="thumb-delete" aria-label="删除${imageLabel}" title="删除" ${controlsDisabled}>×</button><button type="button" class="thumb-preview" aria-label="放大预览${imageLabel}"><img src="${img.url}" alt="" /></button>${sourceTag}`;
         const thumbImage = node.querySelector('img');
         node.querySelector('.thumb-preview').addEventListener('click', () => openReferencePreview({ scope: options.scope, taskId: options.taskId, index }));
         thumbImage.addEventListener('error', () => showThumbnailFallback(thumbImage, imageLabel), { once: true });
@@ -652,23 +666,38 @@
           } else applyDelete();
         });
         const handle = node.querySelector('.thumb-handle');
-        handle.addEventListener('dragstart', e => {
-          if (options.saving) { e.preventDefault(); return; }
-          dragState = { scope: options.scope, taskId: options.taskId, from: index };
-          e.dataTransfer.effectAllowed = 'move';
-          e.dataTransfer.setData('text/plain', String(index));
-        });
-        handle.addEventListener('dragend', () => { dragState = null; document.querySelectorAll('.drag-over').forEach(x => x.classList.remove('drag-over')); });
-        node.addEventListener('dragover', e => { if (dragState && dragState.scope === options.scope && dragState.taskId === options.taskId) { e.preventDefault(); node.classList.add('drag-over'); } });
-        node.addEventListener('dragleave', () => node.classList.remove('drag-over'));
-        node.addEventListener('drop', e => {
-          e.preventDefault(); node.classList.remove('drag-over');
-          if (options.saving || !dragState || dragState.scope !== options.scope || dragState.taskId !== options.taskId) return;
-          const list = [...currentImagesForScope(options.scope, options.taskId)];
-          const [moved] = list.splice(dragState.from, 1);
-          list.splice(index, 0, moved);
-          setImagesForScope(options.scope, options.taskId, list, { operation: 'reorder' });
+        const clearMouseDrag = () => {
+          document.removeEventListener('mousemove', moveMouseDrag);
+          document.removeEventListener('mouseup', finishMouseDrag);
+          document.querySelectorAll('.thumb.dragging, .thumb.drag-over').forEach(el => el.classList.remove('dragging', 'drag-over'));
           dragState = null;
+        };
+        const moveMouseDrag = e => {
+          if (!dragState || dragState.scope !== options.scope || dragState.taskId !== options.taskId) return;
+          const target = document.elementFromPoint(e.clientX, e.clientY)?.closest('.thumb');
+          document.querySelectorAll('.thumb.drag-over').forEach(el => el.classList.remove('drag-over'));
+          if (target && target.parentElement === container && target !== node) {
+            target.classList.add('drag-over');
+            dragState.to = Number(target.dataset.index);
+          } else dragState.to = null;
+        };
+        const finishMouseDrag = () => {
+          if (!dragState || dragState.scope !== options.scope || dragState.taskId !== options.taskId) return;
+          const { from, to } = dragState;
+          clearMouseDrag();
+          if (options.saving || to === null || from === to) return;
+          const list = [...currentImagesForScope(options.scope, options.taskId)];
+          const [moved] = list.splice(from, 1);
+          list.splice(to, 0, moved);
+          setImagesForScope(options.scope, options.taskId, list, { operation: 'reorder' });
+        };
+        handle.addEventListener('mousedown', e => {
+          if (options.saving || e.button !== 0) return;
+          e.preventDefault();
+          dragState = { scope: options.scope, taskId: options.taskId, from: index, to: null };
+          node.classList.add('dragging');
+          document.addEventListener('mousemove', moveMouseDrag);
+          document.addEventListener('mouseup', finishMouseDrag);
         });
         container.appendChild(node);
       });
@@ -797,7 +826,7 @@
         (currentSide === 'artist' ? skuInput : (store === '请选择店铺' ? storeInput : asinInput)).focus();
         return;
       }
-      const returnedSku = currentSide === 'artist' ? sku : (asin === 'B0DEMO002' ? '8154637' : '6409613');
+      const returnedSku = currentSide === 'artist' ? sku : (asin === 'B0DEMO002' ? '8154637' : '22062564');
       const oldSku = drawerState.boundIdentity?.sku || '';
       const productImageCount = drawerState.images.filter(img => img.source === 'product').length;
       const shouldClearOldProductImages = !!oldSku && oldSku !== returnedSku && productImageCount > 0;
@@ -868,7 +897,15 @@
 
     function renderDrawerImages() {
       renderThumbStrip(els.drawerThumbs, drawerState.images, { scope: 'drawer', taskId: null });
-      els.drawerCount.textContent = `已上传 ${drawerState.images.length}/5 张`;
+      const imageCount = drawerState.images.length;
+      els.drawerThumbs.hidden = imageCount === 0;
+      els.drawerUploadTrigger.hidden = imageCount > 0;
+      els.drawerCount.textContent = `当前 ${imageCount}/5 张`;
+      els.drawerImageHint.textContent = imageCount === 0
+        ? '支持点击、拖入本地图片或粘贴图片；产品库图片请使用右上角入口。'
+        : (imageCount < 5
+          ? '点击“＋”、拖拽或粘贴可继续添加；左上角手柄旁序号表示当前顺序。'
+          : '已达 5 张上限；左上角手柄旁序号表示当前顺序。');
       updateDrawerProductButton();
     }
 
@@ -1244,7 +1281,11 @@
     function handleFiles(files, scopeInfo = uploadScope) {
       if (!scopeInfo || !files?.length) return;
       const images = [...currentImagesForScope(scopeInfo.scope, scopeInfo.taskId)];
-      [...files].filter(f => f.type.startsWith('image/')).slice(0, 5 - images.length).forEach(file => {
+      const capacity = 5 - images.length;
+      if (capacity <= 0) { showToast('已达 5 张上限，请先删除一张参考图'); return; }
+      const acceptedFiles = [...files].filter(f => f.type.startsWith('image/')).slice(0, capacity);
+      if (!acceptedFiles.length) return;
+      acceptedFiles.forEach(file => {
         images.push({ id: `local-${Date.now()}-${Math.random()}`, url: URL.createObjectURL(file), source: 'local', name: file.name });
       });
       setImagesForScope(scopeInfo.scope, scopeInfo.taskId, images, { operation: 'upload' });
@@ -1318,8 +1359,10 @@
     els.drawerSubmit.addEventListener('click', () => saveDrawer(true));
     els.drawerProductEntry.addEventListener('click', () => { if (drawerState?.skuBound) openProductModal({ origin: 'drawer' }); });
     els.drawerUploadTrigger.addEventListener('click', () => openFilePicker('drawer'));
-    els.drawerUploadTrigger.addEventListener('dragover', e => { e.preventDefault(); e.dataTransfer.dropEffect = 'copy'; });
-    els.drawerUploadTrigger.addEventListener('drop', e => { e.preventDefault(); handleFiles(e.dataTransfer.files, { scope: 'drawer', taskId: null }); });
+    els.drawerReferenceZone.addEventListener('dragenter', e => { e.preventDefault(); els.drawerReferenceZone.classList.add('drag-active'); });
+    els.drawerReferenceZone.addEventListener('dragover', e => { e.preventDefault(); e.dataTransfer.dropEffect = 'copy'; });
+    els.drawerReferenceZone.addEventListener('dragleave', e => { if (!els.drawerReferenceZone.contains(e.relatedTarget)) els.drawerReferenceZone.classList.remove('drag-active'); });
+    els.drawerReferenceZone.addEventListener('drop', e => { e.preventDefault(); els.drawerReferenceZone.classList.remove('drag-active'); handleFiles(e.dataTransfer.files, { scope: 'drawer', taskId: null }); });
     els.fileInput.addEventListener('change', () => handleFiles(els.fileInput.files));
     document.addEventListener('paste', e => { if (drawerState) handleFiles([...e.clipboardData.items].filter(x => x.type.startsWith('image/')).map(x => x.getAsFile()), { scope: 'drawer', taskId: null }); });
     els.modalClose.addEventListener('click', closeProductModal);
